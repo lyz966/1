@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>进出校通行码</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(180deg, #e6f0ff 0%, #f9f0f9 100%);
+            min-height: 100vh;
+        }
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .profile-card {
+            border-radius: 16px;
+        }
+        .time-display {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #165DFF;
+            letter-spacing: -0.5px;
+        }
+        .arrow-box {
+            background-color: #165DFF;
+            border-radius: 16px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .arrow-icon {
+            font-size: 4rem;
+            line-height: 1;
+            opacity: 0.9;
+            width: 80px;
+            height: 80px;
+            background-color: #165DFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: white;
+            border: 10px solid white;
+            font-weight: 900;
+            -webkit-text-stroke: 2px white;
+        }
+        .return-btn {
+            background-color: #165DFF;
+            color: white;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .return-btn:active {
+            background-color: #0E42D2;
+            transform: scale(0.98);
+        }
+         .watermark {
+             color: rgba(0, 0, 0, 0.08);
+             font-size: 1.2rem;
+             font-weight: bold;
+             position: absolute;
+             transform: rotate(-15deg);
+             user-select: none;
+             pointer-events: none;
+         }
+         .watermark-2 {
+             color: rgba(0, 0, 0, 0.08);
+             font-size: 1.2rem;
+             font-weight: bold;
+             position: absolute;
+             transform: rotate(-15deg);
+             user-select: none;
+             pointer-events: none;
+         }
+         .watermark-3 {
+             color: rgba(0, 0, 0, 0.08);
+             font-size: 1.2rem;
+             font-weight: bold;
+             position: absolute;
+             transform: rotate(-15deg);
+             user-select: none;
+             pointer-events: none;
+         }
+    </style>
+</head>
+<body class="p-4 font-sans">
+    <!-- 返回按钮 -->
+    <div class="mb-4">
+        <i class="fa fa-angle-left text-gray-600 text-xl"></i>
+    </div>
+    
+    <!-- 标题 -->
+    <div class="text-center text-xl font-bold mb-6 text-gray-800">进出校通行码</div>
+    
+    <!-- 个人信息卡片 -->
+    <div class="card p-5 mb-5 profile-card relative overflow-hidden">
+         <!-- 水印 -->
+         <div class="watermark top-10 left-[-30px]">刘译泽</div>
+         <div class="watermark-2 top-16 right-[-30px]">刘译泽</div>
+         <div class="watermark-3 top-24 left-8">刘译泽</div>
+        
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <div class="text-[1.5rem] font-bold text-gray-800 mb-1">刘译泽</div>
+                <div class="text-gray-600 mb-1">大数据与人工智能2402班</div>
+                <div class="text-gray-600 mb-1">班主任:吴国委</div>
+                <div class="text-gray-600 mb-1">开始时间:2025-09-19 16:29</div>
+                <div class="text-gray-600">结束时间:2025-09-19 20:29</div>
+            </div>
+             <div class="w-24 h-30 bg-gray-200 rounded-lg overflow-hidden relative">
+                 <div class="w-full h-full flex items-center justify-center">
+                     <div class="w-16 h-20 bg-gray-400 rounded-lg relative">
+                         <div class="absolute top-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gray-500 rounded-full"></div>
+                         <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-12 h-6 bg-gray-500 rounded-full"></div>
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+    
+    <!-- 时间和通行状态卡片 -->
+    <div class="card p-5 mb-6 relative overflow-hidden">
+         <!-- 水印 -->
+         <div class="watermark top-20 left-[-30px]">刘译泽</div>
+         <div class="watermark-2 top-28 right-[-30px]">刘译泽</div>
+         <div class="watermark-3 top-36 left-8">刘译泽</div>
+        
+        <div class="time-display text-center mb-6" id="currentTime">17:40:13:844</div>
+        
+        <div class="arrow-box p-8 text-center">
+            <div class="arrow-icon mb-3">↑</div>
+            <div class="text-lg mb-1">离校时间</div>
+            <div class="text-lg font-medium" id="leaveTime">2025-09-19 17:39:35</div>
+        </div>
+    </div>
+    
+    <!-- 返校按钮 -->
+    <div class="return-btn text-center py-4 mb-6" id="returnBtn">返校</div>
+
+    <script>
+         // 更新当前时间显示
+         function updateCurrentTime() {
+             const now = new Date();
+             const hours = now.getHours().toString().padStart(2, '0');
+             const minutes = now.getMinutes().toString().padStart(2, '0');
+             const seconds = now.getSeconds().toString().padStart(2, '0');
+             const milliseconds = now.getMilliseconds().toString().padStart(3, '0');
+             document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}:${milliseconds}`;
+             
+             // 更新离校时间为实时时间
+             const year = now.getFullYear();
+             const month = (now.getMonth() + 1).toString().padStart(2, '0');
+             const day = now.getDate().toString().padStart(2, '0');
+             const leaveTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+             document.getElementById('leaveTime').textContent = leaveTime;
+         }
+
+        // 初始化时间并设置定时器
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 10);
+
+         // 返校按钮点击事件
+         document.getElementById('returnBtn').addEventListener('click', function() {
+             this.textContent = '已确认返校';
+             this.style.backgroundColor = '#00B42A';
+             
+             // 更新箭头框状态为返校
+             const arrowBox = document.querySelector('.arrow-box');
+             arrowBox.innerHTML = `
+                 <div class="arrow-icon mb-3">↓</div>
+                 <div class="text-lg mb-1">返校时间</div>
+                 <div class="text-lg font-medium" id="returnTime">${new Date().toLocaleString('zh-CN', {
+                     year: 'numeric',
+                     month: '2-digit',
+                     day: '2-digit',
+                     hour: '2-digit',
+                     minute: '2-digit',
+                     second: '2-digit'
+                 }).replace(',', '')}</div>
+             `;
+             
+             // 更新圆圈中的箭头为向下箭头
+             const arrowIcon = document.querySelector('.arrow-icon');
+             if (arrowIcon) {
+                 arrowIcon.innerHTML = '↓';
+             }
+         });
+    </script>
+</body>
+</html>
